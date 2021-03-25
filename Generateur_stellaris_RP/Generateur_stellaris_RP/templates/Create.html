@@ -1,10 +1,34 @@
-{% extends "layout.html" %}
+﻿{% extends "layout.html" %}
 
 {% block content %}
 
 <h2>{{ title }}.</h2>
 <h3>{{ message }}</h3>
 
-<p>Use this area to provide additional information.</p>
+<form action="/handle_create" method="post">
+    <div>
+        <label for="democratie">Defenseur de la democratie :</label>
+        <input type="number" id="democratie" name="democratie" min="0" max="10">
+    </div>
+    <div>
+        <label for="predicateur">Predicateur de la fin des temps :</label>
+        <input type="number" id="predicateur" name="predicateur" min="0" max="10">
+    </div>
+    <div>
+        <label for="vivant">Protecteur du vivant :</label>
+        <input type="number" id="vivant" name="vivant" min="0" max="10">
+    </div>
+    <div>
+        <label for="vassal">Vassal de l'empereur :</label>
+        <input type="number" id="vassal" name="vassal" min="0" max="10">
+    </div>
+    <div>
+        <label for="marchand">Marchand universel :</label>
+        <input type="number" id="marchand" name="marchand" min="0" max="10">
+    </div>
+    <div class="button">
+        <button type="submit">Creation de la partie</button>
+    </div>
+</form>
 
 {% endblock %}
