@@ -8,8 +8,12 @@ from flask import (Flask, after_this_request, make_response, request,
 from Generateur_stellaris_RP import app
 import os
 import shortuuid
+import numpy as np
+import json
+import random
+import time
 
-UPLOAD_FOLDER = "./static/parties/"
+UPLOAD_FOLDER = "Generateur_stellaris_RP/static/games/"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 @app.route('/')
@@ -27,9 +31,9 @@ def join():
     """Renders the join page."""
     return render_template(
         'Join.html',
-        title='Join',
+        title='Rejoindre une partie',
         year=datetime.now().year,
-        message='Your contact page.'
+        message="Veuillez entrer l'ID de votre partie"
     )
 
 @app.route('/Regles')
@@ -40,7 +44,6 @@ def regles():
         title='Regles',
         year=datetime.now().year,
         message='Voici les règles de notre petit jeu.',
-        charset='utf-16'
     )
 
 @app.route('/Create')
@@ -48,31 +51,92 @@ def create():
     """Renders the create page."""
     return render_template(
         'Create.html',
-        title='Create',
+        title='Creation de la partie',
         year=datetime.now().year,
-        message='Your application description page.'
+        message='Il y à également un avatar et un empereur qui sont ajouté automatiquement'
     )
 
 @app.route('/handle_create',methods=["POST"])
 def handle_create():
     id_partie = shortuuid.uuid()
     result = {}
-    result["avatar"] = {"id" : shortuuid.uuid(),"nombre":1 }
-    result["empereur"] = {"id" : shortuuid.uuid(),"nombre":1 }
+    result["Avatar_de_la_fin_des_temps"] = {"id" : shortuuid.uuid(),"nombre":1 }
+    result["Emperor_of_the_mankind"] = {"id" : shortuuid.uuid(),"nombre":1 }
 
     if request.form["democratie"] != "0" and request.form["democratie"] != "":
-        result["democratie"] = {"id":shortuuid.uuid(), "nombre":request.form["democratie"]}
+        result["Defenseur_de_la_democratie"] = {"id":shortuuid.uuid(), "nombre":request.form["democratie"]}
 
     if request.form["predicateur"] != "0" and request.form["predicateur"] != "":
-        result["predicateur"] = {"id":shortuuid.uuid(), "nombre":request.form["predicateur"],"id_avatar":result["avatar"]["id"]}
+        result["Predicateur_de_la_fin_des_temps"] = {"id":shortuuid.uuid(), "nombre":request.form["predicateur"],"id_avatar":result["avatar"]["id"]}
 
     if request.form["vivant"] != "0" and request.form["vivant"] != "":
-        result["vivant"] = {"id":shortuuid.uuid(), "nombre":request.form["vivant"]}
+        result["Protecteur_du_vivant"] = {"id":shortuuid.uuid(), "nombre":request.form["vivant"]}
 
     if request.form["vassal"] != "0" and request.form["vassal"] != "":
-        result["vassal"] = {"id":shortuuid.uuid(), "nombre":request.form["vassal"],"id_empereur":result["empereur"]["id"]}
+        result["Vassal_de_l'empereur"] = {"id":shortuuid.uuid(), "nombre":request.form["vassal"],"id_empereur":result["empereur"]["id"]}
 
     if request.form["marchand"] != "0" and request.form["marchand"] != "":
-        result["marchand"] = {"id":shortuuid.uuid(), "nombre":request.form["marchand"]}
+        result["Marchand_universel"] = {"id":shortuuid.uuid(), "nombre":request.form["marchand"]}
+     
+    with open(app.config["UPLOAD_FOLDER"] + str(id_partie), 'w') as f:
+        json.dump(result, f, indent=4)
+    
+    return render_template(
+        'game_creation.html',
+        title='Creation de partie',
+        year=datetime.now().year,
+        message='Votre partie à bien été créer',
+        id = id_partie
+    )
+@app.route('/handle_join',methods=["POST"])
+def handle_join():
+    time.sleep(random.random())
 
-    return(result)
+    id_partie = request.form["id"]
+    try:
+        f = open(app.config["UPLOAD_FOLDER"] + id_partie)
+        role_restant = json.load(f)
+    except:
+        return render_template(
+        'error_game.html',
+        title='Partie innexistante ou fermé',
+        year=datetime.now().year,
+        message='Veuillez créer une partie ou en rejoindre une valide')
+
+    role, infos = random.choice(list(role_restant.items()))
+
+    id_joueur = infos["id"]
+    try:
+        id_avatar = infos["id_avatar"]
+    except:
+        id_avatar = ""
+
+    try:
+        id_empereur = infos["id_empereur"]
+    except:
+        id_empereur = ""
+
+    role_restant [role]["nombre"] = int(role_restant[role]["nombre"]) - 1 #On enlève une place restante dans les roles
+
+    if role_restant[role]["nombre"] == 0: #Si il y a plus de role on le suprime 
+        role_restant.pop(role)
+    with open(app.config["UPLOAD_FOLDER"] + str(id_partie), 'w') as f:
+        json.dump(role_restant, f, indent=4) #On enregistre les modficiations
+
+    @after_this_request
+    def remove_game(response):
+
+        if len(role_restant) == 0:
+            os.remove(app.config["UPLOAD_FOLDER"] + id_partie)
+        return(response)
+
+    return render_template(
+        'game_join.html',
+        title='Voici votre role:',
+        year=datetime.now().year,
+        message='Id de la partie:' + str(id_partie),
+        id = id_joueur,
+        role = role,
+        id_avatar = id_avatar,
+        id_empereur = id_empereur
+    )

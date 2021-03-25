@@ -2,9 +2,17 @@
 
 {% block content %}
 
-<h2>{{ title }}.</h2>
+<h2>{{ title }}</h2>
 <h3>{{ message }}</h3>
 
-<p>Use this area to provide additional information.</p>
+<form action="/handle_join" method="post">
+    <div>
+        <label for="id">Id de la partie:</label>
+        <input type="text" id="id" name="id">
+    </div>
+    <div class="button">
+        <button type="submit">Prendre un role"</button>
+    </div>
+</form>
 
 {% endblock %}

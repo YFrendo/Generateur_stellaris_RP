@@ -37,11 +37,15 @@
     <Folder Include="Generateur_stellaris_RP\static\" />
     <Folder Include="Generateur_stellaris_RP\static\content\" />
     <Folder Include="Generateur_stellaris_RP\static\fonts\" />
+    <Folder Include="Generateur_stellaris_RP\static\games\" />
     <Folder Include="Generateur_stellaris_RP\static\scripts\" />
     <Folder Include="Generateur_stellaris_RP\templates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Generateur_stellaris_RP\templates\Create.html" />
+    <Content Include="Generateur_stellaris_RP\templates\game_creation.html" />
+    <Content Include="Generateur_stellaris_RP\templates\game_join.html" />
+    <Content Include="Generateur_stellaris_RP\templates\error_game.html" />
     <Content Include="Generateur_stellaris_RP\templates\RP_Stellaris.html" />
     <Content Include="requirements.txt" />
     <Content Include="Generateur_stellaris_RP\static\content\bootstrap.css" />
