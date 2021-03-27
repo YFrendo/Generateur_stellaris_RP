@@ -50,9 +50,9 @@ def create():
     """Renders the create page."""
     return render_template(
         'Create.html',
-        title='Creation de la partie',
+        title='Création de la partie',
         year=datetime.now().year,
-        message='Il y a également un avatar et un empereur qui sont ajouté automatiquement'
+        message='Il y a également un avatar et un empereur qui sont ajoutés automatiquement'
     )
 
 @app.route('/handle_create',methods=["POST"])
@@ -82,9 +82,9 @@ def handle_create():
     
     return render_template(
         'game_creation.html',
-        title='Creation de partie',
+        title='Création de partie',
         year=datetime.now().year,
-        message='Votre partie à bien été créer',
+        message='Votre partie a bien été créé',
         id = id_partie
     )
 @app.route('/handle_join',methods=["POST"])
