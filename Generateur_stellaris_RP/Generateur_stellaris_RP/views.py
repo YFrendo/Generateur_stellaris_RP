@@ -8,7 +8,6 @@ from flask import (Flask, after_this_request, make_response, request,
 from Generateur_stellaris_RP import app
 import os
 import shortuuid
-import numpy as np
 import json
 import random
 import time
