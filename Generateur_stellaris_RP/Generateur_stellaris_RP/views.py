@@ -52,7 +52,7 @@ def create():
         'Create.html',
         title='Creation de la partie',
         year=datetime.now().year,
-        message='Il y à également un avatar et un empereur qui sont ajouté automatiquement'
+        message='Il y a également un avatar et un empereur qui sont ajouté automatiquement'
     )
 
 @app.route('/handle_create',methods=["POST"])
@@ -66,13 +66,13 @@ def handle_create():
         result["Defenseur_de_la_democratie"] = {"id":shortuuid.uuid(), "nombre":request.form["democratie"]}
 
     if request.form["predicateur"] != "0" and request.form["predicateur"] != "":
-        result["Predicateur_de_la_fin_des_temps"] = {"id":shortuuid.uuid(), "nombre":request.form["predicateur"],"id_avatar":result["avatar"]["id"]}
+        result["Predicateur_de_la_fin_des_temps"] = {"id":shortuuid.uuid(), "nombre":request.form["predicateur"],"id_avatar":result["Avatar_de_la_fin_des_temps"]["id"]}
 
     if request.form["vivant"] != "0" and request.form["vivant"] != "":
         result["Protecteur_du_vivant"] = {"id":shortuuid.uuid(), "nombre":request.form["vivant"]}
 
     if request.form["vassal"] != "0" and request.form["vassal"] != "":
-        result["Vassal_de_l'empereur"] = {"id":shortuuid.uuid(), "nombre":request.form["vassal"],"id_empereur":result["empereur"]["id"]}
+        result["Vassal_de_l'empereur"] = {"id":shortuuid.uuid(), "nombre":request.form["vassal"],"id_empereur":result["Emperor_of_the_mankind"]["id"]}
 
     if request.form["marchand"] != "0" and request.form["marchand"] != "":
         result["Marchand_universel"] = {"id":shortuuid.uuid(), "nombre":request.form["marchand"]}
