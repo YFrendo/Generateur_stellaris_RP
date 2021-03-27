@@ -8,7 +8,6 @@ from flask import (Flask, after_this_request, make_response, request,
 from Generateur_stellaris_RP import app
 import os
 import shortuuid
-import numpy as np
 import json
 import random
 import time
@@ -53,7 +52,7 @@ def create():
         'Create.html',
         title='Creation de la partie',
         year=datetime.now().year,
-        message='Il y à également un avatar et un empereur qui sont ajouté automatiquement'
+        message='Il y a également un avatar et un empereur qui sont ajouté automatiquement'
     )
 
 @app.route('/handle_create',methods=["POST"])
